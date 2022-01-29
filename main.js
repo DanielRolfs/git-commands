@@ -1,4 +1,5 @@
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ2MjkyMywiZXhwIjoxOTU5MDM4OTIzfQ.P3RcKSjvaJx0XAV8cty4Zh_9g5eGycc__ld0omY5kvM';
+const commandsList = document.getElementById('commands-list');
 
 // Example POST method implementation:
 async function getData(url = '') {
@@ -19,7 +20,32 @@ async function getData(url = '') {
     return response.json(); // parses JSON response into native JavaScript objects
   }
   
-  let data = getData('https://uzahtkeaortoovtlkcdn.supabase.co/rest/v1/commands?select=*')
-    .then(data => {
-      console.log(data); // JSON data parsed by `data.json()` call
-    });
+ async function populateList() {
+
+  let data = await getData('https://uzahtkeaortoovtlkcdn.supabase.co/rest/v1/commands?select=*');
+
+  
+
+
+commandsList.insertAdjacentHTML("afterbegin", "<ul>");
+for (element of data) {
+    console.log(element.command);
+    console.log(element.description);
+
+    let loopElement = `
+    <li>
+        <span>
+            ${element.command}:
+        </span>
+        <span>
+            ${element.description}
+        </span>
+    </li>
+`;
+    commandsList.insertAdjacentHTML("beforeend", loopElement);
+};
+
+commandsList.insertAdjacentHTML("beforeend", "</ul>");
+};
+
+populateList();
